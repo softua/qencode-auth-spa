@@ -1,33 +1,47 @@
-import { useState } from "react";
-import reactLogo from "../shared/assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./index.css";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+import { AuthRequired } from "../features/auth/hoc/AuthRequired";
+import { LoginPage } from "../features/auth/pages/LoginPage";
+import { HomePage } from "../features/home/pages/HomePage";
+import { ReactElement, useEffect } from "react";
+import { useAuthStore } from "../features/auth/model/useAuthStore";
+import RequestStatus from "../features/shared/data/entities/RequestStatus";
+import { Header } from "../features/shared/components/Header";
 
-export function App() {
-  const [count, setCount] = useState(0);
+const router = createBrowserRouter(
+  createRoutesFromElements([
+    <Route
+      path="/"
+      element={
+        <AuthRequired>
+          <HomePage />
+        </AuthRequired>
+      }
+    />,
+    <Route path="/login" element={<LoginPage />} />,
+  ])
+);
+
+function App(): ReactElement {
+  const { checkAuth, status } = useAuthStore((state) => state);
+  const isLoading =
+    status === RequestStatus.initial || status == RequestStatus.processing;
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="underline">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/app/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header />
+      {isLoading && <h1 className="title">Loading...</h1>}
+      {!isLoading && <RouterProvider router={router} />}
     </>
   );
 }
+
+export default App;

@@ -1,0 +1,60 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  @apply mb-6;
+
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 400;
+
+  &.large {
+    width: 100%;
+  }
+
+  label {
+    text-align: left;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .error {
+    position: absolute;
+    bottom: -20px;
+    left: 0;
+    right: 0;
+    text-align: left;
+    color: red;
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  border: 1.2px solid #d3d8dc;
+  border-radius: 6px;
+  color: #060e1e;
+  padding: 14px 12px;
+  transition: border-color 0.3s;
+
+  .input-container.error & {
+    border-color: red;
+  }
+
+  input {
+    border: none;
+    flex-grow: 1;
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #a1abb5;
+    }
+  }
+
+  img {
+    margin-left: 1rem;
+  }
+}

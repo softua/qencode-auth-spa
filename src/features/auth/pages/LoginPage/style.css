@@ -1,0 +1,3 @@
+.social-login-buttons {
+  @apply flex-col;
+}
