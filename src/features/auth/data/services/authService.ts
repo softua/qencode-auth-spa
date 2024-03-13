@@ -8,7 +8,7 @@ const login = async (
 ): Promise<AxiosResponse<AuthResponse>> =>
   authApiClient.post<AuthResponse>("/login", {
     email,
-    passowrd: password,
+    password,
   });
 
 const refresh = async (

@@ -8,16 +8,19 @@ import {
   setRefreshToken,
 } from "@/packages/storage";
 import AuthStore from "./AuthStore";
+import { isAxiosError } from "axios";
 
 const useAuthStore = create<AuthStore>()(
   devtools(
     (set) => ({
       status: RequestStatus.initial,
+      checkAuthstatus: RequestStatus.initial,
       isAuthorized: false,
       accessToken: null,
+      loginError: null,
 
       async login(email: string, passowrd: string) {
-        set({ status: RequestStatus.processing });
+        set({ status: RequestStatus.processing, loginError: null });
         try {
           const response = await authService.login(email, passowrd);
           const { access_token, refresh_token } = response.data;
@@ -31,8 +34,17 @@ const useAuthStore = create<AuthStore>()(
             accessToken: access_token,
           });
         } catch (error) {
-          console.log(error);
+          let errorMessage = "Something went wrong";
+          if (isAxiosError(error)) {
+            const statusCode = error.response?.status;
+            if (statusCode === 401) {
+              errorMessage = "Please enter correct email and password";
+            } else if (statusCode === 422) {
+              errorMessage = "Validation error";
+            }
+          }
           set({
+            loginError: errorMessage,
             status: RequestStatus.fail,
             isAuthorized: false,
             accessToken: null,
@@ -41,12 +53,12 @@ const useAuthStore = create<AuthStore>()(
       },
 
       async checkAuth() {
-        set({ status: RequestStatus.processing });
+        set({ checkAuthstatus: RequestStatus.processing });
         try {
           const refreshToken = await getRefreshToken();
           if (!refreshToken)
             return set({
-              status: RequestStatus.fail,
+              checkAuthstatus: RequestStatus.fail,
               isAuthorized: false,
               accessToken: null,
             });
@@ -59,11 +71,11 @@ const useAuthStore = create<AuthStore>()(
           set({
             accessToken: data.access_token,
             isAuthorized: true,
-            status: RequestStatus.success,
+            checkAuthstatus: RequestStatus.success,
           });
         } catch (error) {
           set({
-            status: RequestStatus.fail,
+            checkAuthstatus: RequestStatus.fail,
             isAuthorized: false,
             accessToken: null,
           });

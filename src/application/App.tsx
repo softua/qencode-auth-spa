@@ -29,9 +29,10 @@ const router = createBrowserRouter(
 );
 
 function App(): ReactElement {
-  const { checkAuth, status } = useAuthStore((state) => state);
+  const { checkAuth, checkAuthstatus } = useAuthStore((state) => state);
   const isLoading =
-    status === RequestStatus.initial || status == RequestStatus.processing;
+    checkAuthstatus === RequestStatus.initial ||
+    checkAuthstatus == RequestStatus.processing;
 
   useEffect(() => {
     checkAuth();

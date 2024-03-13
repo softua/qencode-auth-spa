@@ -13,12 +13,12 @@ type IInitial = IForm & {
 
 const EMAIL_PATTERN = RegExp(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/);
 
-export default function useLoginForm(initial: IInitial) {
+export function useLoginForm(initial: IInitial) {
   const [email, setEmail] = useState(initial.email);
   const [password, setPassword] = useState(initial.password);
   const [emailError, setEmailError] = useState<string>();
   const [passwordError, setPasswordError] = useState<string>();
-  const isFormValid = Boolean(emailError && passwordError);
+  const isFormValid = Boolean(!emailError && !passwordError);
 
   const onEmailChange = useCallback(
     (value: IForm["email"]) => {
