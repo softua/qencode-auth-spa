@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_API_URL, TIMEOUT } from "./constants";
+import addTokenRequestInterceptor from "./interceptors/addTokenRequestInterceptor";
 
 const apiClient = axios.create({
   baseURL: BASE_API_URL,
@@ -7,13 +8,6 @@ const apiClient = axios.create({
 });
 
 // Add Authorization header
-apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
+apiClient.interceptors.request.use(addTokenRequestInterceptor);
 
 export default apiClient;

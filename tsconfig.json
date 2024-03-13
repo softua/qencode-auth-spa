@@ -26,9 +26,6 @@
       "@/*": [
         "src/*"
       ],
-      "@assets/*": [
-        "src/assets/*"
-      ],
     },
   },
   "include": [

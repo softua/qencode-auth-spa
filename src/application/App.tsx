@@ -8,7 +8,7 @@ import { AuthRequired } from "../features/auth/hoc/AuthRequired";
 import { LoginPage } from "../features/auth/pages/LoginPage";
 import { HomePage } from "../features/home/pages/HomePage";
 import { ReactElement, useEffect } from "react";
-import { useAuthStore } from "../features/auth/model/useAuthStore";
+import useAuthStore from "../features/auth/model/useAuthStore";
 import RequestStatus from "../features/shared/data/entities/RequestStatus";
 import { Header } from "../features/shared/components/Header";
 

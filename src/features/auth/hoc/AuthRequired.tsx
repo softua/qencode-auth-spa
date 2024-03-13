@@ -1,5 +1,5 @@
 import { PropsWithChildren, ReactNode } from "react";
-import { useAuthStore } from "../model/useAuthStore";
+import useAuthStore from "../model/useAuthStore";
 import { Navigate } from "react-router-dom";
 
 export function AuthRequired({ children }: PropsWithChildren): ReactNode {

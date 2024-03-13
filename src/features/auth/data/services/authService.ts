@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import authApiClient from "../../../shared/data/services/authApiClient";
+import authApiClient from "@/packages/apiClient/authApiClient";
 import AuthResponse from "../entities/AuthResponse";
 
 const login = async (

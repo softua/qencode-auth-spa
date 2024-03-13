@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useId, useMemo, useState } from "react";
 import "./style.css";
-import EyeIcon from "@assets/icons/eye.svg?react";
+import EyeIcon from "@/assets/icons/eye.svg?react";
 
 interface IProps {
   type: "email" | "password";
