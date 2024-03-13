@@ -19,8 +19,23 @@ export const refresh = async (
   });
 
 export const resetPassword = async (
-  email: string
+  email: string,
+  redirectUrl: string
 ): Promise<AxiosResponse<void>> =>
   authApiClient.post("/password-reset", {
     email,
+    redirect_url: redirectUrl,
+  });
+
+export const setPassword = async (
+  token: string,
+  secret: string,
+  password: string,
+  passwordConfirm: string
+): Promise<AxiosResponse<void>> =>
+  authApiClient.post("/password-set", {
+    token,
+    secret,
+    password,
+    password_confirm: passwordConfirm,
   });

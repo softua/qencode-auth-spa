@@ -12,6 +12,7 @@ import { useAuthStore } from "../features/auth/model/useAuthStore";
 import RequestStatus from "../features/shared/data/entities/RequestStatus";
 import { Header } from "../features/shared/components/Header";
 import { ForgotPassword } from "@/features/auth/pages/ForgotPassword";
+import { SetPassword } from "@/features/auth/pages/SetPassword";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
     />,
     <Route path="/login" element={<LoginPage />} />,
     <Route path="/forgot-password" element={<ForgotPassword />} />,
+    <Route path="/set-password" element={<SetPassword />} />,
     <Route path="*" element={<div>NOT FOUND</div>} />,
   ])
 );

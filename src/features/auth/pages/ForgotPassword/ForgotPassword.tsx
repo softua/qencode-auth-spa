@@ -5,23 +5,19 @@ import { useAuthStore } from "../../model/useAuthStore";
 import { useForgotPasswordForm } from "../../model/useForgotPasswordForm";
 import RequestStatus from "@/features/shared/data/entities/RequestStatus";
 
-interface ForgotPasswordProps {}
+export const ForgotPassword: FC = () => {
+  const authStore = useAuthStore();
+  const form = useForgotPasswordForm({
+    email: "",
+    // These messages should be passed through i18n
+    emailErrorMessage: "Please provide a correct email",
+    onSubmit: ({ email }) =>
+      authStore.passwordReset(email, `${location.origin}/set-password`),
+  });
 
-export const ForgotPassword: FC<ForgotPasswordProps> = () => {
-  const { resetPasswordStatus, resetPasswordError, passwordReset } =
-    useAuthStore();
+  const isLoading = authStore.resetPasswordStatus === RequestStatus.processing;
 
-  const { email, emailError, isFormValid, onEmailChange, handleSubmit } =
-    useForgotPasswordForm({
-      email: "",
-      // These messages should be passed through i18n
-      emailErrorMessage: "Please provide a correct email",
-      onSubmit: ({ email }) => passwordReset(email),
-    });
-
-  const isLoading = resetPasswordStatus == RequestStatus.processing;
-
-  if (resetPasswordStatus === RequestStatus.success) {
+  if (authStore.resetPasswordStatus === RequestStatus.success) {
     return (
       <h1 className="title mb-10 text-center">
         Email sent! Please follow instructions to change your password
@@ -32,7 +28,7 @@ export const ForgotPassword: FC<ForgotPasswordProps> = () => {
   return (
     <form
       className="flex flex-col"
-      onSubmit={handleSubmit}
+      onSubmit={form.handleSubmit}
       onReset={() => {
         history.back();
       }}
@@ -41,18 +37,22 @@ export const ForgotPassword: FC<ForgotPasswordProps> = () => {
       <Input
         type="email"
         placeholder="Enter your email"
-        value={email}
-        error={emailError}
-        onChange={onEmailChange}
+        value={form.email}
+        error={form.emailError}
+        onChange={form.onEmailChange}
       />
-      <Button type="submit" isDisabled={!isFormValid || isLoading} isFullWidth>
+      <Button
+        type="submit"
+        isDisabled={!form.isFormValid || isLoading}
+        isFullWidth
+      >
         {isLoading ? "..." : "Send"}
       </Button>
       <Button type="reset" colorsType="secondary" isFullWidth className="mt-5">
         Cancel
       </Button>
-      {resetPasswordError && (
-        <div className="error-message">{resetPasswordError}</div>
+      {authStore.resetPasswordError && (
+        <div className="error-message">{authStore.resetPasswordError}</div>
       )}
     </form>
   );

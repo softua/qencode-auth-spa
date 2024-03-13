@@ -13,41 +13,32 @@ import { useEffect } from "react";
 import { isPrivateRouteState } from "../../hoc/AuthRequired";
 
 export const LoginPage: React.FC = () => {
-  const { login, status, loginError, isAuthorized } = useAuthStore();
+  const store = useAuthStore();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const {
-    email,
-    password,
-    emailError,
-    passwordError,
-    isFormValid,
-    onEmailChange,
-    onPasswordChange,
-    handleSubmit,
-  } = useLoginForm({
+  const form = useLoginForm({
     email: "",
     password: "",
     // These messages should be passed through i18n
     emailErrorMessage: "Please provide a correct email",
     passwordErrorMessage: "Password should be at least 8 characters long.",
-    onSubmit: ({ email, password }) => login(email, password),
+    onSubmit: ({ email, password }) => store.login(email, password),
   });
 
-  const isLoading = status === RequestStatus.processing;
+  const isLoading = store.status === RequestStatus.processing;
 
   useEffect(() => {
-    if (!isAuthorized) return;
+    if (!store.isAuthorized) return;
     const redirectPath =
       isPrivateRouteState(state) && state.privateRoute
         ? state.privateRoute
         : "/";
 
     navigate(redirectPath, { replace: true });
-  }, [isAuthorized, navigate, state]);
+  }, [navigate, state, store.isAuthorized]);
 
   return (
-    <form className="flex flex-col" onSubmit={handleSubmit}>
+    <form className="flex flex-col" onSubmit={form.handleSubmit}>
       <h1 className="title mb-10 text-center">Log in to your account</h1>
       <div className="social-login-buttons flex-col sm:flex-row">
         <SocialLoginButton className="mb-4 sm:mb-0 sm:mr-4">
@@ -63,21 +54,25 @@ export const LoginPage: React.FC = () => {
       <Input
         type="email"
         placeholder="Work email"
-        value={email}
-        error={emailError}
-        onChange={onEmailChange}
+        value={form.email}
+        error={form.emailError}
+        onChange={form.onEmailChange}
       />
       <Input
         type="password"
         placeholder="Password"
-        value={password}
-        error={passwordError}
-        onChange={onPasswordChange}
+        value={form.password}
+        error={form.passwordError}
+        onChange={form.onPasswordChange}
       />
       <NavLink to="/forgot-password" className="link forgot-password-link">
         Forgot your password?
       </NavLink>
-      <Button type="submit" isDisabled={!isFormValid || isLoading} isFullWidth>
+      <Button
+        type="submit"
+        isDisabled={!form.isFormValid || isLoading}
+        isFullWidth
+      >
         {isLoading ? "..." : "Log in to Qencode"}
       </Button>
       <div className="sign-up-container">
@@ -86,7 +81,9 @@ export const LoginPage: React.FC = () => {
           Sign up
         </NavLink>
       </div>
-      {loginError && <div className="error-message">{loginError}</div>}
+      {store.loginError && (
+        <div className="error-message">{store.loginError}</div>
+      )}
     </form>
   );
 };

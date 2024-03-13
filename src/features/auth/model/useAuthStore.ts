@@ -1,7 +1,12 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import RequestStatus from "../../shared/data/entities/RequestStatus";
-import { login, refresh, resetPassword } from "../data/services/authService";
+import {
+  login,
+  refresh,
+  resetPassword,
+  setPassword,
+} from "../data/services/authService";
 import {
   getRefreshToken,
   setAccessToken,
@@ -20,6 +25,8 @@ const useAuthStore = create<AuthStore>()(
       loginError: null,
       resetPasswordStatus: RequestStatus.initial,
       resetPasswordError: null,
+      setPasswordStatus: RequestStatus.initial,
+      setPasswordError: null,
 
       login: async (email: string, passowrd: string) => {
         set({ status: RequestStatus.processing, loginError: null });
@@ -84,14 +91,14 @@ const useAuthStore = create<AuthStore>()(
         }
       },
 
-      passwordReset: async (email) => {
+      passwordReset: async (email, redirectUrl) => {
         set({
           resetPasswordStatus: RequestStatus.processing,
           resetPasswordError: null,
         });
 
         try {
-          await resetPassword(email);
+          await resetPassword(email, redirectUrl);
           set({
             resetPasswordStatus: RequestStatus.success,
           });
@@ -109,6 +116,35 @@ const useAuthStore = create<AuthStore>()(
           set({
             resetPasswordError: errorMessage,
             resetPasswordStatus: RequestStatus.fail,
+          });
+        }
+      },
+
+      passwordSet: async (token, secret, password, passwordConfirm) => {
+        set({
+          setPasswordStatus: RequestStatus.processing,
+          setPasswordError: null,
+        });
+
+        try {
+          await setPassword(token, secret, password, passwordConfirm);
+          set({
+            setPasswordStatus: RequestStatus.success,
+          });
+        } catch (error) {
+          let errorMessage = "Something went wrong";
+          if (isAxiosError(error)) {
+            const statusCode = error.response?.status;
+            if (statusCode === 401) {
+              errorMessage = "You have no access";
+            } else if (statusCode === 422) {
+              errorMessage = "Validation error";
+            }
+          }
+
+          set({
+            setPasswordError: errorMessage,
+            setPasswordStatus: RequestStatus.fail,
           });
         }
       },

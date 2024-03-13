@@ -8,8 +8,16 @@ export default interface AuthStore {
   loginError: string | null;
   resetPasswordStatus: RequestStatus;
   resetPasswordError: string | null;
+  setPasswordStatus: RequestStatus;
+  setPasswordError: string | null;
 
   login: (email: string, password: string) => Promise<void> | void;
   checkAuth: () => Promise<void> | void;
-  passwordReset: (email: string) => Promise<void> | void;
+  passwordReset: (email: string, redirectUrl: string) => Promise<void> | void;
+  passwordSet: (
+    token: string,
+    secret: string,
+    password: string,
+    passwordConfirm: string
+  ) => Promise<void> | void;
 }
