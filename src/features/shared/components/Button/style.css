@@ -1,0 +1,30 @@
+.button {
+  font-size: 16px;
+  line-height: 1.3125;
+  font-weight: 500;
+  padding: 13px;
+  border: 1.2px solid;
+  border-radius: 8px;
+  background-color: #316fea;
+  color: white;
+
+  &.primary {
+    background-color: #316fea;
+    color: white;
+    border-color: #316fea;
+  }
+
+  &.secondary {
+    background-color: transparent;
+    color: #060e1e;
+    border-color: #d3d8dc;
+  }
+
+  &.big {
+    width: 100%;
+  }
+
+  &.disabled {
+    cursor: disabled;
+  }
+}

@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useId, useMemo, useState } from "react";
 import "./style.css";
 import EyeIcon from "@/assets/icons/eye.svg?react";
 
-interface IProps {
+interface InputProps {
   type: "email" | "password";
   name?: string;
   value?: string;
@@ -12,7 +12,7 @@ interface IProps {
   onChange?: (value: string) => void;
 }
 
-export const Input: FC<IProps> = ({
+const Input: FC<InputProps> = ({
   name,
   value,
   placeholder,
@@ -61,3 +61,5 @@ export const Input: FC<IProps> = ({
     </div>
   );
 };
+
+export default Input;

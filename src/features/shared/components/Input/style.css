@@ -9,10 +9,6 @@
   line-height: 20px;
   font-weight: 400;
 
-  &.large {
-    width: 100%;
-  }
-
   label {
     text-align: left;
     font-weight: 500;

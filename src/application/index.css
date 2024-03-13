@@ -163,8 +163,22 @@
   }
 }
 
+@media (min-width: 640px) {
+  #root {
+    max-width: 400px;
+    margin: 2rem auto;
+    text-align: center;
+    padding: 0;
+  }
+}
+
 #root {
-  max-width: 400px;
-  margin: 2rem auto;
-  text-align: center;
+  padding: 20px;
+}
+
+.link {
+  font-size: 14px;
+  line-height: 1.43;
+  font-weight: 500;
+  color: #316fea;
 }

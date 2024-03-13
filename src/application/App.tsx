@@ -23,6 +23,8 @@ const router = createBrowserRouter(
       }
     />,
     <Route path="/login" element={<LoginPage />} />,
+    <Route path="/forgot-password" element={<div>Forgot password page</div>} />,
+    <Route path="*" element={<div>NOT FOUND</div>} />,
   ])
 );
 
