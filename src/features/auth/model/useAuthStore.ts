@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import RequestStatus from "../../shared/data/entities/RequestStatus";
-import authService from "../data/services/authService";
+import { login, refresh, resetPassword } from "../data/services/authService";
 import {
   getRefreshToken,
   setAccessToken,
@@ -18,11 +18,13 @@ const useAuthStore = create<AuthStore>()(
       isAuthorized: false,
       accessToken: null,
       loginError: null,
+      resetPasswordStatus: RequestStatus.initial,
+      resetPasswordError: null,
 
       login: async (email: string, passowrd: string) => {
         set({ status: RequestStatus.processing, loginError: null });
         try {
-          const response = await authService.login(email, passowrd);
+          const response = await login(email, passowrd);
           const { access_token, refresh_token } = response.data;
           await Promise.all([
             setAccessToken(access_token),
@@ -63,7 +65,7 @@ const useAuthStore = create<AuthStore>()(
               accessToken: null,
             });
 
-          const { data } = await authService.refresh(refreshToken);
+          const { data } = await refresh(refreshToken);
           await Promise.all([
             setAccessToken(data.access_token),
             setRefreshToken(data.refresh_token),
@@ -78,6 +80,35 @@ const useAuthStore = create<AuthStore>()(
             checkAuthstatus: RequestStatus.fail,
             isAuthorized: false,
             accessToken: null,
+          });
+        }
+      },
+
+      passwordReset: async (email) => {
+        set({
+          resetPasswordStatus: RequestStatus.processing,
+          resetPasswordError: null,
+        });
+
+        try {
+          await resetPassword(email);
+          set({
+            resetPasswordStatus: RequestStatus.success,
+          });
+        } catch (error) {
+          let errorMessage = "Something went wrong";
+          if (isAxiosError(error)) {
+            const statusCode = error.response?.status;
+            if (statusCode === 401) {
+              errorMessage = "Please enter a correct email";
+            } else if (statusCode === 422) {
+              errorMessage = "Validation error";
+            }
+          }
+
+          set({
+            resetPasswordError: errorMessage,
+            resetPasswordStatus: RequestStatus.fail,
           });
         }
       },
