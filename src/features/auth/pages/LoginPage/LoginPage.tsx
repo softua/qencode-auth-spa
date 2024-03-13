@@ -6,12 +6,16 @@ import "./style.css";
 import GoogleIcon from "@/assets/icons/google.svg?react";
 import GithubIcon from "@/assets/icons/github.svg?react";
 import { Separator } from "../../components/Separator";
-import { NavLink } from "react-router-dom";
-import useAuthStore from "../../model/useAuthStore";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useAuthStore } from "../../model/useAuthStore";
 import RequestStatus from "@/features/shared/data/entities/RequestStatus";
+import { useEffect } from "react";
+import { isPrivateRouteState } from "../../hoc/AuthRequired";
 
 export const LoginPage: React.FC = () => {
-  const { login, status, loginError } = useAuthStore();
+  const { login, status, loginError, isAuthorized } = useAuthStore();
+  const { state } = useLocation();
+  const navigate = useNavigate();
   const {
     email,
     password,
@@ -31,6 +35,16 @@ export const LoginPage: React.FC = () => {
   });
 
   const isLoading = status === RequestStatus.processing;
+
+  useEffect(() => {
+    if (!isAuthorized) return;
+    const redirectPath =
+      isPrivateRouteState(state) && state.privateRoute
+        ? state.privateRoute
+        : "/";
+
+    navigate(redirectPath, { replace: true });
+  }, [isAuthorized, navigate, state]);
 
   return (
     <form className="flex flex-col" onSubmit={handleSubmit}>

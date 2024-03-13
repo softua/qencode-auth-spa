@@ -4,11 +4,11 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { AuthRequired } from "../features/auth/hoc/AuthRequired";
+import { AuthRequired } from "../features/auth/hoc/AuthRequired/AuthRequired";
 import { LoginPage } from "../features/auth/pages/LoginPage";
 import { HomePage } from "../features/home/pages/HomePage";
 import { ReactElement, useEffect } from "react";
-import useAuthStore from "../features/auth/model/useAuthStore";
+import { useAuthStore } from "../features/auth/model/useAuthStore";
 import RequestStatus from "../features/shared/data/entities/RequestStatus";
 import { Header } from "../features/shared/components/Header";
 
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
 );
 
 function App(): ReactElement {
-  const { checkAuth, checkAuthstatus } = useAuthStore((state) => state);
+  const { checkAuth, checkAuthstatus } = useAuthStore();
   const isLoading =
     checkAuthstatus === RequestStatus.initial ||
     checkAuthstatus == RequestStatus.processing;

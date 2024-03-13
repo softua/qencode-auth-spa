@@ -19,7 +19,7 @@ const useAuthStore = create<AuthStore>()(
       accessToken: null,
       loginError: null,
 
-      async login(email: string, passowrd: string) {
+      login: async (email: string, passowrd: string) => {
         set({ status: RequestStatus.processing, loginError: null });
         try {
           const response = await authService.login(email, passowrd);
@@ -52,7 +52,7 @@ const useAuthStore = create<AuthStore>()(
         }
       },
 
-      async checkAuth() {
+      checkAuth: async () => {
         set({ checkAuthstatus: RequestStatus.processing });
         try {
           const refreshToken = await getRefreshToken();
@@ -88,4 +88,4 @@ const useAuthStore = create<AuthStore>()(
   )
 );
 
-export default useAuthStore;
+export { useAuthStore };
