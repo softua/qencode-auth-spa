@@ -13,6 +13,7 @@ import RequestStatus from "../features/shared/data/entities/RequestStatus";
 import { Header } from "../features/shared/components/Header";
 import { ForgotPassword } from "@/features/auth/pages/ForgotPassword";
 import { SetPassword } from "@/features/auth/pages/SetPassword";
+import { PageTitle } from "@/features/shared/components/PageTitle";
 
 const router = createBrowserRouter(
   createRoutesFromElements([
@@ -44,7 +45,7 @@ function App(): ReactElement {
   return (
     <>
       <Header />
-      {isLoading && <h1 className="title">Loading...</h1>}
+      {isLoading && <PageTitle>Loading...</PageTitle>}
       {!isLoading && <RouterProvider router={router} />}
     </>
   );

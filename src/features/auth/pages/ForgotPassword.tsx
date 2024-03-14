@@ -1,9 +1,10 @@
 import { Button } from "@/features/shared/components/Button";
-import Input from "@/features/shared/components/Input";
+import { Input } from "@/features/shared/components/Input";
 import { FC } from "react";
-import { useAuthStore } from "../../model/useAuthStore";
-import { useForgotPasswordForm } from "../../model/useForgotPasswordForm";
+import { useAuthStore } from "../model/useAuthStore";
+import { useForgotPasswordForm } from "../model/useForgotPasswordForm";
 import RequestStatus from "@/features/shared/data/entities/RequestStatus";
+import { PageTitle } from "@/features/shared/components/PageTitle";
 
 export const ForgotPassword: FC = () => {
   const authStore = useAuthStore();
@@ -19,9 +20,9 @@ export const ForgotPassword: FC = () => {
 
   if (authStore.resetPasswordStatus === RequestStatus.success) {
     return (
-      <h1 className="title mb-10 text-center">
+      <PageTitle className="mb-10 text-center">
         Email sent! Please follow instructions to change your password
-      </h1>
+      </PageTitle>
     );
   }
 
@@ -33,7 +34,7 @@ export const ForgotPassword: FC = () => {
         history.back();
       }}
     >
-      <h1 className="title mb-10 text-center">Forgot Password?</h1>
+      <PageTitle className="mb-10 text-center">Forgot Password?</PageTitle>
       <Input
         type="email"
         placeholder="Enter your email"

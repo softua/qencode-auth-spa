@@ -1,1 +1,0 @@
-export { SetPassword } from "./SetPassword";

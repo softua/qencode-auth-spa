@@ -1,10 +1,11 @@
 import { Button } from "@/features/shared/components/Button";
-import Input from "@/features/shared/components/Input";
+import { Input } from "@/features/shared/components/Input";
 import { FC, useEffect, useRef } from "react";
-import { useSetPasswordForm } from "../../model/useSetPasswordForm";
-import { useAuthStore } from "../../model/useAuthStore";
+import { useSetPasswordForm } from "../model/useSetPasswordForm";
+import { useAuthStore } from "../model/useAuthStore";
 import RequestStatus from "@/features/shared/data/entities/RequestStatus";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { PageTitle } from "@/features/shared/components/PageTitle";
 
 export const SetPassword: FC = () => {
   const store = useAuthStore();
@@ -37,15 +38,15 @@ export const SetPassword: FC = () => {
 
   if (invalidSearchParamsRef.current) {
     return (
-      <h1 className="title mb-10 text-center">
+      <PageTitle className="mb-10 text-center">
         Wrong link. Please check your email
-      </h1>
+      </PageTitle>
     );
   }
 
   return (
     <form className="flex flex-col" onSubmit={form.handleSubmit}>
-      <h1 className="title mb-10 text-center">Create new Password?</h1>
+      <PageTitle className="mb-10 text-center">Create new Password?</PageTitle>
       <Input
         type="password"
         name="password"

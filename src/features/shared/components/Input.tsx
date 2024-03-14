@@ -1,5 +1,5 @@
-import { ChangeEvent, FC, useId, useMemo, useState } from "react";
-import "./style.css";
+import { ChangeEvent, FC, useId, useState } from "react";
+import { clsx } from "clsx/lite";
 import EyeIcon from "@/assets/icons/eye.svg?react";
 
 interface InputProps {
@@ -12,7 +12,7 @@ interface InputProps {
   onChange?: (value: string) => void;
 }
 
-const Input: FC<InputProps> = ({
+export const Input: FC<InputProps> = ({
   name,
   value,
   placeholder,
@@ -25,11 +25,6 @@ const Input: FC<InputProps> = ({
   const hasError = Boolean(error && error?.length > 0);
   const [currentType, setCurrentType] = useState(type);
   const id = useId();
-  const containerClasses = useMemo(() => {
-    const value = ["input-container"];
-    if (hasError) value.push("error");
-    return value.join(" ");
-  }, [hasError]);
 
   const handleEyeIconClick = () => {
     if (currentType === "password") {
@@ -44,10 +39,20 @@ const Input: FC<InputProps> = ({
   };
 
   return (
-    <div className={containerClasses}>
-      {label && <label htmlFor={id}>{label}</label>}
-      <div className="input-wrapper">
+    <div className="flex flex-col items-stretch relative mb-6 text-[15px]/[20px] font-normal">
+      {label && (
+        <label htmlFor={id} className="text-left font-medium mb-2">
+          {label}
+        </label>
+      )}
+      <div
+        className={clsx(
+          "flex border-[1.2px] border-solid border-[#d3d8dc] rounded-md text-[#060e1e] py-[14px] px-3 transition-colors duration-300",
+          hasError && "border-red-600"
+        )}
+      >
         <input
+          className="border-none grow focus-visible:outline-none placeholder:text-[#a1abb5]"
           id={id}
           name={name}
           type={currentType}
@@ -55,11 +60,15 @@ const Input: FC<InputProps> = ({
           placeholder={placeholder}
           onChange={handleChange}
         />
-        {isEyeIconShown && <EyeIcon onClick={handleEyeIconClick} />}
+        {isEyeIconShown && (
+          <EyeIcon onClick={handleEyeIconClick} className="ml-4" />
+        )}
       </div>
-      {hasError && <div className="error">{error}</div>}
+      {hasError && (
+        <div className="absolute -bottom-5 left-0 right-0 text-left text-red-600">
+          {error}
+        </div>
+      )}
     </div>
   );
 };
-
-export default Input;

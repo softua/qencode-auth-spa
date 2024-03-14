@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from "@/features/shared/components/Button";
 import { FC } from "react";
-import "./style.css";
+import { clsx } from "clsx/lite";
 
 export type SocialLoginButtonProps = Pick<
   ButtonProps,
@@ -16,7 +16,10 @@ export const SocialLoginButton: FC<SocialLoginButtonProps> = ({
       type="button"
       colorsType="secondary"
       isFullWidth
-      className={`social-login ${className}`}
+      className={clsx(
+        "flex justify-center items-center text-[14px]/[1.43] space-x-[10px]",
+        className
+      )}
       {...rest}
     />
   );
